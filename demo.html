@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Component Design Showcase & Demo</title>
+
+  <!-- Pretendard WebFont -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  
+  <!-- Design System Stylesheets -->
+  <link rel="stylesheet" href="./styles/global.css">
+  <link rel="stylesheet" href="./styles/components.css">
+
+  <style>
+    body {
+      background-color: #f1f2f6;
+      padding: 32px 16px;
+    }
+
+    .demo-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .demo-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2d3436;
+      margin-bottom: 8px;
+    }
+
+    .demo-subtitle {
+      font-size: 16px;
+      color: #636e72;
+      margin-bottom: 36px;
+    }
+
+    .demo-section {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .demo-section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #6c5ce7;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f3f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .demo-preview-box {
+      max-width: 480px;
+      margin: 0 auto;
+      border: 1px dashed #a29bfe;
+      border-radius: 16px;
+      padding: 16px;
+      background: #faf8ff;
+    }
+
+    .controls-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .range-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .range-control input {
+      accent-color: #6c5ce7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="demo-wrapper">
+    <h1 class="demo-title">🎨 UI Component Design Showcase</h1>
+    <p class="demo-subtitle">창업 성향 테스트(STI) 개별 컴포넌트 디자인 & 인터랙션 데모 페이지</p>
+
+    <!-- 1. Header Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>1. Header Component</span>
+        <span class="text-caption">components/Header.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-header"></div>
+    </section>
+
+    <!-- 2. ProgressBar Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>2. ProgressBar Component</span>
+        <span class="text-caption">components/ProgressBar.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-progressbar"></div>
+      <div class="controls-group">
+        <button class="btn btn-outline" style="width: auto; height: 40px; font-size: 14px;" id="btn-step-prev">◀ 이전 스텝</button>
+        <button class="btn btn-primary" style="width: auto; height: 40px; font-size: 14px;" id="btn-step-next">다음 스텝 ▶</button>
+      </div>
+    </section>
+
+    <!-- 3. Button Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>3. Button Component (Variants)</span>
+        <span class="text-caption">components/Button.js</span>
+      </div>
+      <div class="demo-preview-box" style="display: flex; flex-direction: column; gap: 12px;" id="demo-buttons"></div>
+    </section>
+
+    <!-- 4. ChoiceCard Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>4. ChoiceCard Component (Quiz Option)</span>
+        <span class="text-caption">components/ChoiceCard.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-choice-cards"></div>
+    </section>
+
+    <!-- 5. QuestionCard Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>5. QuestionCard Component</span>
+        <span class="text-caption">components/QuestionCard.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-question-card"></div>
+    </section>
+
+    <!-- 6. RadarChart Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>6. RadarChart Component (SVG 6-Axis)</span>
+        <span class="text-caption">components/RadarChart.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-radar-chart"></div>
+      
+      <!-- Interactive Sliders for Live Radar Chart Manipulation -->
+      <div class="controls-group" style="margin-top: 20px;">
+        <div class="range-control">💡 아이디어: <input type="range" id="score-idea" min="0" max="100" value="80"></div>
+        <div class="range-control">🛠️ 제작: <input type="range" id="score-maker" min="0" max="100" value="60"></div>
+        <div class="range-control">📈 전략: <input type="range" id="score-strategy" min="0" max="100" value="90"></div>
+        <div class="range-control">🤝 협업: <input type="range" id="score-collabo" min="0" max="100" value="75"></div>
+        <div class="range-control">📊 분석: <input type="range" id="score-analyst" min="0" max="100" value="50"></div>
+        <div class="range-control">🔥 실행: <input type="range" id="score-action" min="0" max="100" value="85"></div>
+      </div>
+    </section>
+
+    <!-- 7. ResultCard Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>7. ResultCard Component</span>
+        <span class="text-caption">components/ResultCard.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-result-card"></div>
+    </section>
+  </div>
+
+  <script type="module" src="./demo.js"></script>
+</body>
+</html>
