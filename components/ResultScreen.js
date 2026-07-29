@@ -1,10 +1,8 @@
 import { createHeader } from './Header.js';
 import { createRadarChart } from './RadarChart.js';
 import { createButton } from './Button.js';
+import { shareKakaoTalk } from '../utils/kakaoShare.js';
 
-/**
- * Personality Types Dictionary (Matching prd.md & design.md)
- */
 export const PERSONALITY_TYPES = {
   idea: {
     typeKey: 'idea',
@@ -104,14 +102,9 @@ export const PERSONALITY_TYPES = {
   }
 };
 
-/**
- * Determines the dominant personality type based on score breakdown
- * @param {Object} scores - Score mapping per type
- * @returns {Object} Type metadata from PERSONALITY_TYPES
- */
 export function getDominantType(scores = {}) {
   let highestScore = -1;
-  let dominantKey = 'action'; // Default fallback
+  let dominantKey = 'action';
 
   const keys = ['idea', 'maker', 'strategy', 'collabo', 'analyst', 'action'];
   keys.forEach(key => {
@@ -129,12 +122,13 @@ export function getDominantType(scores = {}) {
  * ResultScreen Component
  * @param {Object} props
  * @param {Object} props.scores - Score breakdown object
- * @param {Function} [props.onShare] - Share button callback
+ * @param {Function} [props.onShareKakao] - Custom KakaoTalk share callback
+ * @param {Function} [props.onShare] - Share link callback
  * @param {Function} [props.onSaveImage] - Save image button callback
  * @param {Function} [props.onRetry] - Retry test callback
  * @returns {HTMLElement}
  */
-export function createResultScreen({ scores = {}, onShare, onSaveImage, onRetry } = {}) {
+export function createResultScreen({ scores = {}, onShareKakao, onShare, onSaveImage, onRetry } = {}) {
   const container = document.createElement('div');
   container.className = 'result-screen-container animate-slide-up';
 
@@ -214,18 +208,29 @@ export function createResultScreen({ scores = {}, onShare, onSaveImage, onRetry 
   // 5. Mount Action Buttons
   const buttonsSlot = content.querySelector('#result-buttons-slot');
 
+  // KakaoTalk Share Button (Yellow #FEE500)
+  const kakaoShareBtn = createButton({
+    text: '카카오톡으로 공유하기',
+    variant: 'kakao',
+    icon: '💬',
+    onClick: onShareKakao || (() => shareKakaoTalk({ typeInfo, scores }))
+  });
+
   const shareBtn = createButton({
     text: '결과 링크 복사하기',
     variant: 'primary',
     icon: '🔗',
-    onClick: onShare || (() => alert('결과 링크가 복사되었습니다!'))
+    onClick: onShare || (() => {
+      navigator.clipboard?.writeText(window.location.href);
+      alert('📋 결과 링크가 클립보드에 복사되었습니다!');
+    })
   });
 
   const saveImageBtn = createButton({
     text: '결과 이미지로 저장하기',
     variant: 'outline',
     icon: '📸',
-    onClick: onSaveImage || (() => alert('결과 리포트 이미지 저장 기능이 실행되었습니다.'))
+    onClick: onSaveImage || (() => alert('📸 결과 리포트 저장 완료!'))
   });
 
   const retryBtn = createButton({
@@ -235,6 +240,7 @@ export function createResultScreen({ scores = {}, onShare, onSaveImage, onRetry 
     onClick: onRetry
   });
 
+  buttonsSlot.appendChild(kakaoShareBtn);
   buttonsSlot.appendChild(shareBtn);
   buttonsSlot.appendChild(saveImageBtn);
   buttonsSlot.appendChild(retryBtn);

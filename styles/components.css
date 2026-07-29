@@ -128,6 +128,23 @@
   background-color: #e4e7eb;
 }
 
+.btn-kakao {
+  background-color: #fee500;
+  color: #191919;
+  box-shadow: 0 4px 16px rgba(254, 229, 0, 0.4);
+}
+
+.btn-kakao:hover {
+  background-color: #fada00;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(254, 229, 0, 0.5);
+}
+
+.btn-kakao:active {
+  transform: scale(0.97);
+}
+
+
 /* ==========================================
    4. ChoiceCard Component Styles
    ========================================== */
