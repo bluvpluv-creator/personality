@@ -1,0 +1,38 @@
+/* CSS Design Tokens from design.md */
+:root {
+  /* Brand Colors */
+  --color-primary: #6c5ce7;
+  --color-primary-hover: #5b4cc4;
+  --color-primary-light: #a29bfe;
+  --color-secondary: #ff6b6b;
+  --color-secondary-hover: #ee5253;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-text-main: #2d3436;
+  --color-text-sub: #636e72;
+  --color-border: #e9ecef;
+
+  /* Personality Type Colors */
+  --color-type-idea: #ff9f43;     /* 아이디어형 - 오렌지 */
+  --color-type-maker: #10ac84;    /* 제작형 - 티얼 그린 */
+  --color-type-strategy: #2e86de; /* 전략형 - 로열 블루 */
+  --color-type-collabo: #ff6b6b;  /* 협업형 - 핫 코랄 */
+  --color-type-analyst: #576574;  /* 분석형 - 슬레이트 그레이 */
+  --color-type-action: #ee5253;   /* 실행형 - 네온 레드 */
+
+  /* Typography */
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Radii & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+  --shadow-card: 0 10px 30px rgba(108, 92, 231, 0.08);
+  --shadow-hover: 0 12px 24px rgba(108, 92, 231, 0.15);
+  --shadow-button: 0 6px 20px rgba(108, 92, 231, 0.25);
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
