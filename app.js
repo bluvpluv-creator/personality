@@ -1,6 +1,7 @@
 import { createStartScreen } from './components/StartScreen.js';
 import { createProgressBar } from './components/ProgressBar.js';
 import { createQuestionCard } from './components/QuestionCard.js';
+import { createLoadingScreen } from './components/LoadingScreen.js';
 import { createResultCard } from './components/ResultCard.js';
 
 // Sample Questions Data
@@ -69,12 +70,31 @@ function renderQuizFlow(container, step, total, scores) {
       if (step < total) {
         renderQuizFlow(container, step + 1, total, scores);
       } else {
-        renderResult(container, scores);
+        // Step === Total: Show Loading Screen before showing results
+        renderLoadingView(container, () => {
+          renderResult(container, scores);
+        });
       }
     }
   });
 
   container.appendChild(questionCard);
+}
+
+function renderLoadingView(container, onComplete) {
+  container.innerHTML = '';
+
+  const loadingScreen = createLoadingScreen({
+    duration: 3000,
+    messages: [
+      '당신의 창업 답변 데이터를 모으고 있어요...',
+      '6가지 창업 성향 매칭 알고리즘 가동 중...',
+      '당신과 어울리는 환상의 짝꿍 분석 완료!'
+    ],
+    onComplete: onComplete
+  });
+
+  container.appendChild(loadingScreen);
 }
 
 function renderResult(container, scores) {
