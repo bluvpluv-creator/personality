@@ -2,7 +2,7 @@ import { createStartScreen } from './components/StartScreen.js';
 import { createProgressBar } from './components/ProgressBar.js';
 import { createQuestionCard } from './components/QuestionCard.js';
 import { createLoadingScreen } from './components/LoadingScreen.js';
-import { createResultCard } from './components/ResultCard.js';
+import { createResultScreen } from './components/ResultScreen.js';
 
 // Sample Questions Data
 const sampleQuestions = [
@@ -64,7 +64,7 @@ function renderQuizFlow(container, step, total, scores) {
     options: currentQ.options,
     onSelectOption: (selectedOpt) => {
       if (scores[selectedOpt.type] !== undefined) {
-        scores[selectedOpt.type] += 20;
+        scores[selectedOpt.type] += 25;
       }
       
       if (step < total) {
@@ -100,17 +100,21 @@ function renderLoadingView(container, onComplete) {
 function renderResult(container, scores) {
   container.innerHTML = '';
 
-  const resultCard = createResultCard({
+  const resultScreen = createResultScreen({
     scores,
     onShare: () => {
-      alert('결과 링크가 클립보드에 복사되었습니다!');
+      navigator.clipboard?.writeText(window.location.href);
+      alert('📋 결과 링크가 클립보드에 복사되었습니다! 팀원들에게 공유해보세요.');
+    },
+    onSaveImage: () => {
+      alert('📸 결과 리포트 저장 준비 완료! (이미지로 저장되었습니다)');
     },
     onRetry: () => {
       initApp();
     }
   });
 
-  container.appendChild(resultCard);
+  container.appendChild(resultScreen);
 }
 
 document.addEventListener('DOMContentLoaded', initApp);

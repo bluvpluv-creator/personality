@@ -6,7 +6,7 @@ import { createButton } from './components/Button.js';
 import { createChoiceCard } from './components/ChoiceCard.js';
 import { createQuestionCard } from './components/QuestionCard.js';
 import { createRadarChart } from './components/RadarChart.js';
-import { createResultCard } from './components/ResultCard.js';
+import { createResultScreen, getDominantType } from './components/ResultScreen.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. StartScreen Component Demo
@@ -94,8 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   questionBox.appendChild(questionCard);
 
-  // 8. RadarChart Component Demo
+  // 8 & 9. RadarChart and ResultScreen Component Demo
   const radarBox = document.getElementById('demo-radar-chart');
+  const resultBox = document.getElementById('demo-result-card');
   
   const getScoreValues = () => ({
     idea: Number(document.getElementById('score-idea').value),
@@ -106,23 +107,26 @@ document.addEventListener('DOMContentLoaded', () => {
     action: Number(document.getElementById('score-action').value),
   });
 
-  const renderLiveRadar = () => {
+  const renderLiveRadarAndResult = () => {
+    const scores = getScoreValues();
+
+    // Radar Chart Demo Update
     radarBox.innerHTML = '';
-    radarBox.appendChild(createRadarChart({ scores: getScoreValues() }));
+    radarBox.appendChild(createRadarChart({ scores }));
+
+    // Result Screen Demo Update
+    resultBox.innerHTML = '';
+    resultBox.appendChild(createResultScreen({
+      scores,
+      onShare: () => alert('🔗 링크가 클립보드에 복사되었습니다!'),
+      onSaveImage: () => alert('📸 이미지로 저장하기 버튼 클릭!'),
+      onRetry: () => alert('🔄 테스트 다시하기 버튼 클릭!')
+    }));
   };
 
-  renderLiveRadar();
+  renderLiveRadarAndResult();
 
   ['score-idea', 'score-maker', 'score-strategy', 'score-collabo', 'score-analyst', 'score-action'].forEach(id => {
-    document.getElementById(id).addEventListener('input', renderLiveRadar);
+    document.getElementById(id).addEventListener('input', renderLiveRadarAndResult);
   });
-
-  // 9. ResultCard Component Demo
-  const resultBox = document.getElementById('demo-result-card');
-  const resultCard = createResultCard({
-    scores: getScoreValues(),
-    onShare: () => alert('공유하기 버튼 클릭!'),
-    onRetry: () => alert('다시하기 버튼 클릭!')
-  });
-  resultBox.appendChild(resultCard);
 });
