@@ -20,7 +20,7 @@ export function getKakaoKey() {
 }
 
 /**
- * Dynamically loads the Kakao SDK script if not present
+ * Dynamically loads the official Kakao SDK script if not present
  * @returns {Promise<boolean>}
  */
 export function loadKakaoSDKScript() {
@@ -36,15 +36,25 @@ export function loadKakaoSDKScript() {
 
     const script = document.createElement('script');
     script.id = 'kakao-sdk-script';
-    script.src = 'https://tapi.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';
+    // Official Kakao JavaScript SDK CDN URLs (Primary: developers.kakao.com / Fallback: t1.kakaocdn.net)
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
     script.crossOrigin = 'anonymous';
     script.onload = () => {
       console.log('Kakao SDK Script loaded successfully.');
       resolve(!!window.Kakao);
     };
-    script.onerror = (err) => {
-      console.error('Failed to load Kakao SDK Script:', err);
-      resolve(false);
+    script.onerror = () => {
+      // Secondary fallback to Kakao t1 CDN if developers.kakao.com primary is blocked
+      console.warn('Primary Kakao SDK CDN failed, trying t1 fallback CDN...');
+      const fallbackScript = document.createElement('script');
+      fallbackScript.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';
+      fallbackScript.crossOrigin = 'anonymous';
+      fallbackScript.onload = () => resolve(!!window.Kakao);
+      fallbackScript.onerror = (err) => {
+        console.error('All Kakao SDK CDNs failed to load:', err);
+        resolve(false);
+      };
+      document.head.appendChild(fallbackScript);
     };
     document.head.appendChild(script);
   });
