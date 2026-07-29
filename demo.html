@@ -63,6 +63,7 @@
       border-radius: 16px;
       padding: 16px;
       background: #faf8ff;
+      overflow: hidden;
     }
 
     .controls-group {
@@ -92,19 +93,28 @@
     <h1 class="demo-title">🎨 UI Component Design Showcase</h1>
     <p class="demo-subtitle">창업 성향 테스트(STI) 개별 컴포넌트 디자인 & 인터랙션 데모 페이지</p>
 
-    <!-- 1. Header Component -->
+    <!-- 1. StartScreen (Landing Page) Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>1. Header Component</span>
+        <span>1. StartScreen Component (시작 화면 컴포넌트)</span>
+        <span class="text-caption">components/StartScreen.js</span>
+      </div>
+      <div class="demo-preview-box" id="demo-start-screen" style="padding: 0;"></div>
+    </section>
+
+    <!-- 2. Header Component -->
+    <section class="demo-section">
+      <div class="demo-section-title">
+        <span>2. Header Component</span>
         <span class="text-caption">components/Header.js</span>
       </div>
       <div class="demo-preview-box" id="demo-header"></div>
     </section>
 
-    <!-- 2. ProgressBar Component -->
+    <!-- 3. ProgressBar Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>2. ProgressBar Component</span>
+        <span>3. ProgressBar Component</span>
         <span class="text-caption">components/ProgressBar.js</span>
       </div>
       <div class="demo-preview-box" id="demo-progressbar"></div>
@@ -114,42 +124,42 @@
       </div>
     </section>
 
-    <!-- 3. Button Component -->
+    <!-- 4. Button Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>3. Button Component (Variants)</span>
+        <span>4. Button Component (Variants)</span>
         <span class="text-caption">components/Button.js</span>
       </div>
       <div class="demo-preview-box" style="display: flex; flex-direction: column; gap: 12px;" id="demo-buttons"></div>
     </section>
 
-    <!-- 4. ChoiceCard Component -->
+    <!-- 5. ChoiceCard Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>4. ChoiceCard Component (Quiz Option)</span>
+        <span>5. ChoiceCard Component (Quiz Option)</span>
         <span class="text-caption">components/ChoiceCard.js</span>
       </div>
       <div class="demo-preview-box" id="demo-choice-cards"></div>
     </section>
 
-    <!-- 5. QuestionCard Component -->
+    <!-- 6. QuestionCard Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>5. QuestionCard Component</span>
+        <span>6. QuestionCard Component</span>
         <span class="text-caption">components/QuestionCard.js</span>
       </div>
       <div class="demo-preview-box" id="demo-question-card"></div>
     </section>
 
-    <!-- 6. RadarChart Component -->
+    <!-- 7. RadarChart Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>6. RadarChart Component (SVG 6-Axis)</span>
+        <span>7. RadarChart Component (SVG 6-Axis)</span>
         <span class="text-caption">components/RadarChart.js</span>
       </div>
       <div class="demo-preview-box" id="demo-radar-chart"></div>
       
-      <!-- Interactive Sliders for Live Radar Chart Manipulation -->
+      <!-- Interactive Sliders -->
       <div class="controls-group" style="margin-top: 20px;">
         <div class="range-control">💡 아이디어: <input type="range" id="score-idea" min="0" max="100" value="80"></div>
         <div class="range-control">🛠️ 제작: <input type="range" id="score-maker" min="0" max="100" value="60"></div>
@@ -160,10 +170,10 @@
       </div>
     </section>
 
-    <!-- 7. ResultCard Component -->
+    <!-- 8. ResultCard Component -->
     <section class="demo-section">
       <div class="demo-section-title">
-        <span>7. ResultCard Component</span>
+        <span>8. ResultCard Component</span>
         <span class="text-caption">components/ResultCard.js</span>
       </div>
       <div class="demo-preview-box" id="demo-result-card"></div>

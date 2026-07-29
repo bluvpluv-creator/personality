@@ -1,6 +1,5 @@
-import { createHeader } from './components/Header.js';
+import { createStartScreen } from './components/StartScreen.js';
 import { createProgressBar } from './components/ProgressBar.js';
-import { createButton } from './components/Button.js';
 import { createQuestionCard } from './components/QuestionCard.js';
 import { createResultCard } from './components/ResultCard.js';
 
@@ -23,55 +22,32 @@ const sampleQuestions = [
       { letter: 'A', text: '지적된 리스크를 회피할 더 기발한 피봇(Pivot) 아이디어를 바로 제안한다.', type: 'idea' },
       { letter: 'B', text: '데이터와 수치 자료를 찾아 지적된 문제의 객관적 수치를 재검증한다.', type: 'analyst' },
       { letter: 'C', text: '당장 밖으로 나가 고객 10명에게 직접 물어보고 피드백을 수집해온다.', type: 'action' },
-      { letter: 'D', text: '멘토님의 조언을 반영하여 팀의 사업계획서 구조와 BM을 수정한 다.', type: 'strategy' },
+      { letter: 'D', text: '멘토님의 조언을 반영하여 팀의 사업계획서 구조와 BM을 수정한다.', type: 'strategy' },
     ]
   }
 ];
 
-// App Initialization
 function initApp() {
   const appContainer = document.getElementById('app');
   if (!appContainer) return;
+
+  appContainer.innerHTML = '';
 
   let currentStep = 1;
   const totalSteps = 12;
   const userScores = { idea: 0, maker: 0, strategy: 0, collabo: 0, analyst: 0, action: 0 };
 
-  // Render Header
-  const header = createHeader({ logoText: '나의 창업 DNA', badgeText: 'STI Test' });
-  appContainer.appendChild(header);
-
-  // Main View Container
-  const mainView = document.createElement('main');
-  mainView.style.flex = '1';
-  mainView.style.display = 'flex';
-  mainView.style.flexDirection = 'column';
-  appContainer.appendChild(mainView);
-
-  // Render Landing Page Initially
-  renderLandingPage(mainView, () => {
-    renderQuizFlow(mainView, currentStep, totalSteps, userScores);
+  // Render StartScreen Component Initially
+  const startScreen = createStartScreen({
+    logoText: '나의 창업 DNA',
+    badgeText: 'STI Test',
+    participantCount: 154,
+    onStartTest: () => {
+      renderQuizFlow(appContainer, currentStep, totalSteps, userScores);
+    }
   });
-}
 
-function renderLandingPage(container, onStart) {
-  container.innerHTML = `
-    <div style="padding: 32px 20px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; flex: 1;" class="animate-slide-up">
-      <span style="font-size: 64px; margin-bottom: 16px;">🚀</span>
-      <h1 class="text-h1" style="margin-bottom: 12px;">10초 만에 알아보는<br>나의 창업 DNA</h1>
-      <p class="text-body" style="margin-bottom: 32px;">창업 캠프에서 나는 기획자일까, 제작자일까, 실행러일까?<br>나만의 성향과 환상의 짝꿍을 찾아보세요!</p>
-      
-      <div id="start-btn-wrapper" style="width: 100%; max-width: 320px;"></div>
-    </div>
-  `;
-
-  const btnWrapper = container.querySelector('#start-btn-wrapper');
-  const startBtn = createButton({
-    text: '테스트 시작하기',
-    variant: 'primary',
-    onClick: onStart
-  });
-  btnWrapper.appendChild(startBtn);
+  appContainer.appendChild(startScreen);
 }
 
 function renderQuizFlow(container, step, total, scores) {

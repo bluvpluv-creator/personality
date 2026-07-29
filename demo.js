@@ -1,3 +1,4 @@
+import { createStartScreen } from './components/StartScreen.js';
 import { createHeader } from './components/Header.js';
 import { createProgressBar } from './components/ProgressBar.js';
 import { createButton } from './components/Button.js';
@@ -7,11 +8,20 @@ import { createRadarChart } from './components/RadarChart.js';
 import { createResultCard } from './components/ResultCard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Header Component Demo
+  // 1. StartScreen Component Demo
+  const startScreenBox = document.getElementById('demo-start-screen');
+  startScreenBox.appendChild(createStartScreen({
+    logoText: '나의 창업 DNA',
+    badgeText: 'STI Test',
+    participantCount: 154,
+    onStartTest: () => alert('테스트 시작하기 버튼 클릭!')
+  }));
+
+  // 2. Header Component Demo
   const headerBox = document.getElementById('demo-header');
   headerBox.appendChild(createHeader({ logoText: '나의 창업 DNA', badgeText: 'STI Test' }));
 
-  // 2. ProgressBar Component Demo
+  // 3. ProgressBar Component Demo
   let step = 3;
   const total = 12;
   const progressBox = document.getElementById('demo-progressbar');
@@ -32,20 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 3. Button Component Demo
+  // 4. Button Component Demo
   const buttonBox = document.getElementById('demo-buttons');
   buttonBox.appendChild(createButton({ text: 'Primary Button', variant: 'primary', icon: '🚀', onClick: () => alert('Primary Clicked!') }));
   buttonBox.appendChild(createButton({ text: 'Outline Button', variant: 'outline', icon: '🔗', onClick: () => alert('Outline Clicked!') }));
   buttonBox.appendChild(createButton({ text: 'Secondary Button', variant: 'secondary', icon: '🔄', onClick: () => alert('Secondary Clicked!') }));
 
-  // 4. ChoiceCard Component Demo
+  // 5. ChoiceCard Component Demo
   const choiceBox = document.getElementById('demo-choice-cards');
   const choice1 = createChoiceCard({ letter: 'A', text: '일반 선택지 카드 상태 (Default State)', isSelected: false });
   const choice2 = createChoiceCard({ letter: 'B', text: '선택 완료된 카드 상태 (Selected State)', isSelected: true });
   choiceBox.appendChild(choice1);
   choiceBox.appendChild(choice2);
 
-  // 5. QuestionCard Component Demo
+  // 6. QuestionCard Component Demo
   const questionBox = document.getElementById('demo-question-card');
   const questionCard = createQuestionCard({
     question: 'Q3. 아이디어 해커톤 시간, 당신이 가장 먼저 맡고 싶은 역할은?',
@@ -61,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   questionBox.appendChild(questionCard);
 
-  // 6. RadarChart Component Demo
+  // 7. RadarChart Component Demo
   const radarBox = document.getElementById('demo-radar-chart');
   
   const getScoreValues = () => ({
@@ -84,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById(id).addEventListener('input', renderLiveRadar);
   });
 
-  // 7. ResultCard Component Demo
+  // 8. ResultCard Component Demo
   const resultBox = document.getElementById('demo-result-card');
   const resultCard = createResultCard({
     scores: getScoreValues(),
