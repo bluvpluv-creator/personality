@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>웹 시리얼(Web Serial) 아두이노 연결 테스트</title>
+  
+  <!-- Pretendard WebFont -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --primary-hover: #5b4cc4;
+      --success: #10ac84;
+      --danger: #ee5253;
+      --warning: #ff9f43;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #2d3436;
+      --sub-text: #636e72;
+      --border: #e9ecef;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    p.desc {
+      font-size: 14px;
+      color: var(--sub-text);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Connection Bar */
+    .connection-panel {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background-color: #ffe3e3;
+      color: var(--danger);
+    }
+
+    .status-badge.connected {
+      background-color: #d2f9ee;
+      color: var(--success);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: currentColor;
+    }
+
+    /* Buttons & Inputs */
+    .btn {
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    select, input[type="text"], input[type="number"] {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .control-row label {
+      font-size: 13px;
+      font-weight: 700;
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .range-val {
+      font-weight: 700;
+      width: 36px;
+      font-size: 13px;
+    }
+
+    /* Terminal Console */
+    .terminal {
+      background-color: #1e1e2e;
+      color: #a6adc8;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      padding: 14px;
+      border-radius: 8px;
+      height: 320px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .terminal .log-sent {
+      color: #89b4fa;
+    }
+
+    .terminal .log-recv {
+      color: #a6e3a1;
+    }
+
+    .terminal .log-info {
+      color: #f9e2af;
+    }
+
+    .terminal .log-err {
+      color: #f38ba8;
+    }
+
+    .cmd-tag {
+      font-family: monospace;
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🔌 Web Serial 아두이노 테스트 페이지</h1>
+      <p class="desc">범용 펌웨어(web_serial_firmware.ino)의 명령 포맷을 직관적으로 테스트하는 웹 시리얼 API 연동 대시보드입니다.</p>
+    </header>
+
+    <!-- Connection Panel -->
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="card-title">
+        <span>1. 아두이노 시리얼 포트 연결 설정</span>
+        <div class="status-badge" id="status-badge">
+          <span class="status-dot"></span>
+          <span id="status-text">연결 해제됨</span>
+        </div>
+      </div>
+      <div class="connection-panel">
+        <label style="font-weight: 700; font-size: 14px;">Baud Rate:</label>
+        <select id="baud-rate-select">
+          <option value="115200" selected>115200 bps (기본)</option>
+          <option value="9600">9600 bps</option>
+          <option value="57600">57600 bps</option>
+        </select>
+
+        <button class="btn btn-primary" id="btn-connect">⚡ 포트 연결하기</button>
+        <button class="btn btn-danger" id="btn-disconnect" disabled>❌ 연결 해제</button>
+      </div>
+      <div id="web-serial-warning" style="margin-top: 10px; font-size: 12px; color: var(--danger); display: none;">
+        ⚠️ 현재 브라우저는 Web Serial API를 지원하지 않습니다. Chrome 또는 Edge 브라우저를 이용해 주세요.
+      </div>
+    </div>
+
+    <!-- Main Grid UI -->
+    <div class="grid">
+      
+      <!-- Left Column: Command Controls -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- PING & System Commands -->
+        <div class="card">
+          <div class="card-title">
+            <span>2. 시스템 핑 (PING)</span>
+            <span class="cmd-tag">PING</span>
+          </div>
+          <p style="font-size: 13px; color: var(--sub-text); margin-bottom: 12px;">아두이노 연결 상태 응답(PONG)을 확인합니다.</p>
+          <button class="btn btn-outline" id="btn-send-ping" disabled>📡 PING 명령 전송</button>
+        </div>
+
+        <!-- Digital I/O Commands -->
+        <div class="card">
+          <div class="card-title">
+            <span>3. 디지털 입출력 (Digital I/O)</span>
+            <span class="cmd-tag">DIGITAL:WRITE / READ</span>
+          </div>
+          
+          <!-- Digital Write -->
+          <div class="control-row">
+            <label>LED (Pin 13):</label>
+            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" id="btn-digital-on" disabled>💡 HIGH (1)</button>
+            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" id="btn-digital-off" disabled>⚫ LOW (0)</button>
+          </div>
+
+          <!-- Custom Digital Write -->
+          <div class="control-row">
+            <label>Digital Write:</label>
+            <span style="font-size: 13px;">Pin</span>
+            <input type="number" id="digital-pin-input" value="13" style="width: 50px;">
+            <select id="digital-val-select">
+              <option value="1">HIGH (1)</option>
+              <option value="0">LOW (0)</option>
+            </select>
+            <button class="btn btn-outline" style="padding: 6px 10px; font-size: 12px;" id="btn-custom-digital-write" disabled>전송</button>
+          </div>
+
+          <!-- Digital Read -->
+          <div class="control-row">
+            <label>Digital Read:</label>
+            <span style="font-size: 13px;">Pin</span>
+            <input type="number" id="digital-read-pin" value="2" style="width: 50px;">
+            <button class="btn btn-outline" style="padding: 6px 10px; font-size: 12px;" id="btn-digital-read" disabled>읽기</button>
+          </div>
+        </div>
+
+        <!-- Analog I/O & PWM Commands -->
+        <div class="card">
+          <div class="card-title">
+            <span>4. 아날로그 및 PWM</span>
+            <span class="cmd-tag">ANALOG:WRITE / READ</span>
+          </div>
+
+          <!-- Analog Write (PWM) -->
+          <div class="control-row">
+            <label>PWM Write (Pin 9):</label>
+            <input type="range" id="pwm-slider" min="0" max="255" value="128" style="flex: 1;" disabled>
+            <span class="range-val" id="pwm-val-text">128</span>
+          </div>
+
+          <!-- Analog Read -->
+          <div class="control-row">
+            <label>Analog Read:</label>
+            <span style="font-size: 13px;">Pin A</span>
+            <input type="number" id="analog-read-pin" value="0" style="width: 50px;">
+            <button class="btn btn-outline" style="padding: 6px 10px; font-size: 12px;" id="btn-analog-read" disabled>읽기 (A0~A5)</button>
+          </div>
+        </div>
+
+        <!-- Servo & Buzzer Commands -->
+        <div class="card">
+          <div class="card-title">
+            <span>5. 서보모터 & 부저</span>
+            <span class="cmd-tag">SERVO / BUZZER</span>
+          </div>
+
+          <!-- Servo Motor -->
+          <div class="control-row">
+            <label>서보 각도 (Pin 9):</label>
+            <input type="range" id="servo-slider" min="0" max="180" value="90" style="flex: 1;" disabled>
+            <span class="range-val" id="servo-val-text">90°</span>
+          </div>
+
+          <!-- Buzzer Tone -->
+          <div class="control-row">
+            <label>부저 (Pin 8):</label>
+            <input type="number" id="buzzer-freq" value="523" placeholder="주파수(Hz)" style="width: 75px;">
+            <input type="number" id="buzzer-ms" value="300" placeholder="시간(ms)" style="width: 65px;">
+            <button class="btn btn-outline" style="padding: 6px 10px; font-size: 12px;" id="btn-buzzer-send" disabled>울리기 🔔</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Terminal & Raw Serial Send -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <div class="card" style="flex: 1; display: flex; flex-direction: column;">
+          <div class="card-title">
+            <span>💻 시리얼 입출력 터미널 (Terminal Log)</span>
+            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 11px;" id="btn-clear-log">로그 지우기</button>
+          </div>
+
+          <!-- Raw Input Command Field -->
+          <div class="control-row" style="margin-bottom: 12px;">
+            <input type="text" id="raw-cmd-input" placeholder="직접 명령문 입력 (예: PING, DIGITAL:WRITE:13:1)" style="flex: 1;" disabled>
+            <button class="btn btn-primary" style="padding: 8px 14px;" id="btn-send-raw" disabled>전송 ↵</button>
+          </div>
+
+          <!-- Terminal Screen -->
+          <div class="terminal" id="terminal-screen">
+            <div class="log-info">[System] Web Serial 테스트 페이지가 준비되었습니다.</div>
+            <div class="log-info">[System] 아두이노와 연결하려면 '포트 연결하기' 버튼을 클릭하세요.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="./serial_test.js"></script>
+</body>
+</html>
