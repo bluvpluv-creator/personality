@@ -13,8 +13,8 @@ export function getKakaoKey() {
   if (typeof window !== 'undefined' && window.ENV && window.ENV.KAKAO_JAVASCRIPT_KEY) {
     return window.ENV.KAKAO_JAVASCRIPT_KEY;
   }
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env.VITE_KAKAO_JAVASCRIPT_KEY || process.env.KAKAO_JAVASCRIPT_KEY || DEFAULT_KAKAO_KEY;
+  if (typeof process !== 'undefined' && process.env && process.env.KAKAO_JAVASCRIPT_KEY) {
+    return process.env.KAKAO_JAVASCRIPT_KEY;
   }
   return DEFAULT_KAKAO_KEY;
 }

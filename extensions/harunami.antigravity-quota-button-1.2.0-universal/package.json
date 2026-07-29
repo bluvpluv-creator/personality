@@ -1,0 +1,39 @@
+{
+	"name": "antigravity-quota-button",
+	"displayName": "Antigravity QUOTA Button",
+	"description": "Adds a QUOTA button to the status bar to easily open the Models Quota settings.",
+	"version": "1.2.0",
+	"publisher": "harunami",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/harunami/antigravity-model-quota"
+	},
+	"engines": {
+		"vscode": "^1.80.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "antigravityQuotaButton.openModelsSettings",
+				"title": "Open Models Quota Settings"
+			}
+		]
+	},
+	"author": "harunami",
+	"license": "ISC",
+	"dependencies": {
+		"ws": "^8.19.0"
+	},
+	"__metadata": {
+		"installedTimestamp": 1785133445923,
+		"targetPlatform": "universal",
+		"size": 159053
+	}
+}
