@@ -1,8 +1,8 @@
 /**
- * KakaoTalk SDK Share Integration Helper
+ * KakaoTalk SDK Share Integration Helper with Dynamic Script Loader
  */
 
-// Default Kakao JavaScript App Keys (App ID: 1527806 'personality')
+// Default Kakao JavaScript App Key (App ID: 1527806 'personality')
 const DEFAULT_KAKAO_KEY = '44eb032e861c5cacb707db958cb201e6';
 
 /**
@@ -20,12 +20,42 @@ export function getKakaoKey() {
 }
 
 /**
+ * Dynamically loads the Kakao SDK script if not present
+ * @returns {Promise<boolean>}
+ */
+export function loadKakaoSDKScript() {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined') return resolve(false);
+    if (window.Kakao) return resolve(true);
+
+    const existingScript = document.getElementById('kakao-sdk-script');
+    if (existingScript) {
+      existingScript.addEventListener('load', () => resolve(!!window.Kakao));
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'kakao-sdk-script';
+    script.src = 'https://tapi.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';
+    script.crossOrigin = 'anonymous';
+    script.onload = () => {
+      console.log('Kakao SDK Script loaded successfully.');
+      resolve(!!window.Kakao);
+    };
+    script.onerror = (err) => {
+      console.error('Failed to load Kakao SDK Script:', err);
+      resolve(false);
+    };
+    document.head.appendChild(script);
+  });
+}
+
+/**
  * Initializes Kakao SDK safely
  * @returns {boolean}
  */
 export function initKakaoSDK() {
   if (typeof window === 'undefined' || !window.Kakao) {
-    console.warn('Kakao SDK JavaScript file is not loaded.');
     return false;
   }
 
@@ -49,11 +79,17 @@ export function initKakaoSDK() {
  * @param {Object} params
  * @param {Object} params.typeInfo - Dominant personality type metadata
  */
-export function shareKakaoTalk({ typeInfo = {} } = {}) {
+export async function shareKakaoTalk({ typeInfo = {} } = {}) {
+  // 1. Ensure Kakao SDK Script is loaded
+  if (typeof window !== 'undefined' && !window.Kakao) {
+    await loadKakaoSDKScript();
+  }
+
+  // 2. Initialize Kakao SDK
   const isReady = initKakaoSDK();
 
   if (!isReady || !window.Kakao || !window.Kakao.Share) {
-    alert('카카오톡 SDK를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    alert('카카오톡 SDK를 로드하지 못했습니다. 네트워크 연결을 확인해 주세요.');
     return;
   }
 
@@ -86,6 +122,9 @@ export function shareKakaoTalk({ typeInfo = {} } = {}) {
     });
   } catch (err) {
     console.error('Kakao Share Error:', err);
-    alert('카카오톡 공유 에러:\n카카오 개발자 콘솔(developers.kakao.com) -> 내 애플리케이션 -> 앱 -> 일반 메뉴 아래 [플랫폼]에\n' + window.location.origin + ' 도메인을 등록해 주세요!');
+    alert('카카오톡 공유 에러:\n카카오 개발자 콘솔(developers.kakao.com) -> 플랫폼 -> Web 도메인에\n' + window.location.origin + ' 도메인을 등록해 주세요!');
   }
 }
+
+// Automatically load Kakao SDK script on module load
+loadKakaoSDKScript();
