@@ -2,8 +2,8 @@
  * KakaoTalk SDK Share Integration Helper
  */
 
-// Default Kakao JavaScript App Key
-const DEFAULT_KAKAO_KEY = '4d38e0abcb44a49fedf6e8c631824d2b';
+// Default Kakao JavaScript App Keys (App ID: 1527806 'personality')
+const DEFAULT_KAKAO_KEY = '44eb032e861c5cacb707db958cb201e6';
 
 /**
  * Gets Kakao JavaScript Key from environment variables or default fallback
@@ -86,6 +86,6 @@ export function shareKakaoTalk({ typeInfo = {} } = {}) {
     });
   } catch (err) {
     console.error('Kakao Share Error:', err);
-    alert('카카오톡 공유 에러:\n카카오 개발자 콘솔(developers.kakao.com) -> 내 애플리케이션 -> 플랫폼 -> Web 도메인에\n' + window.location.origin + ' 도메인을 등록해 주세요!');
+    alert('카카오톡 공유 에러:\n카카오 개발자 콘솔(developers.kakao.com) -> 내 애플리케이션 -> 앱 -> 일반 메뉴 아래 [플랫폼]에\n' + window.location.origin + ' 도메인을 등록해 주세요!');
   }
 }
